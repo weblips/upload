@@ -1,0 +1,62 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="css/uploadfile.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="js/jquery.uploadfile.min.js"></script>
+</head>
+<body>
+<div id="extraupload">Upload</div>
+<script>
+$(document).ready(function() {
+	var extraObj = $("#extraupload").uploadFile({
+				url:"php/upload.php",
+				fileName:"myfile",
+				//только картинки
+				acceptFiles:"image/*",
+				
+				returnType: "json",
+				showDelete: true,
+				showDownload:true,
+			statusBarWidth:600,
+dragdropWidth:600,
+deleteCallback: function (data, pd) {
+    for (var i = 0; i < data.length; i++) {
+        $.post("php/delete.php", {op: "php/delete",name: data[i]},
+            function (resp,textStatus, jqXHR) {
+                //Show Message	
+                alert("Удалить файл");
+            });
+    }
+    pd.statusbar.hide(); //You choice.
+
+},
+downloadCallback:function(filename,pd)
+	{
+		location.href="download.php?filename="+filename;
+	}
+				
+				dragDropStr: "<span><b>Перетащите сюда картинку</b></span>",
+				abortStr:"abandonner",
+				cancelStr:"Старт",
+				doneStr:"fait",
+				multiDragErrorStr: "Plusieurs Drag &amp; Drop de fichiers ne sont pas autorisés.",
+				extErrorStr:"n'est pas autorisé. Extensions autorisées:",
+				sizeErrorStr:"n'est pas autorisé. Admis taille max:",
+				uploadErrorStr:"Upload n'est pas autorisé",
+				uploadStr:"Загрузить",
+				showPreview:true,
+ previewHeight: "100px",
+ previewWidth: "100px",
+autoSubmit:false,
+});
+$("#extrabutton").click(function()
+{
+
+	extraObj.startUpload();
+}); 
+});
+</script>
+</body>
+</html>
+
